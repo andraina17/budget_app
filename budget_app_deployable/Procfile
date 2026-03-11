@@ -1,0 +1,1 @@
+web: gunicorn budget_app.app:app

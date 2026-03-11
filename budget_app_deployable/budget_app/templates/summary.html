@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Summary - Budget Tracker{% endblock %}
+{% block content %}
+  <h2 class="mt-3">Summary</h2>
+  {% if summary_data %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Total Debits (Expenses)</th>
+          <th>Total Credits (Income)</th>
+          <th>Net Change</th>
+          <th>Current Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in summary_data %}
+        <tr>
+          <td>{{ item.account.name }}</td>
+          <td>${{ '%.2f'|format(item.total_debits) }}</td>
+          <td>${{ '%.2f'|format(item.total_credits) }}</td>
+          <td>
+            {% if item.net_change >= 0 %}
+              <span class="text-success">+${{ '%.2f'|format(item.net_change) }}</span>
+            {% else %}
+              <span class="text-danger">-${{ '%.2f'|format(-item.net_change) }}</span>
+            {% endif %}
+          </td>
+          <td>${{ '%.2f'|format(item.account.balance) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No accounts available to summarize.</p>
+  {% endif %}
+{% endblock %}
