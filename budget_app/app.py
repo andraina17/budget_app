@@ -41,9 +41,12 @@ class Transaction(db.Model):
     type = db.Column(db.String(10), nullable=False)  # 'Debit' or 'Credit'
 
 
-@app.before_first_request
-def create_tables():
-    """Create database tables if they do not exist."""
+# Ensure tables are created at startup. When the app context is available, this
+# will create any missing tables in the database. The `before_first_request`
+# decorator was removed in newer versions of Flask (e.g., Flask 3.x), so we
+# invoke `db.create_all()` explicitly during module import. This runs once
+# when the application is loaded by Gunicorn.
+with app.app_context():
     db.create_all()
 
 
